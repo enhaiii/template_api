@@ -16,12 +16,21 @@ app.get('/students', async (req, res) => {
   res.json(data)
 })
 
-app.post('/students', (req, res) => {
+app.post('/students', async (req, res) => {
+  const { error } = await supabase
+  .from('students')
+  .insert({ "id": 4, "full_name": 'Курзенкова Даниэла Джафарович', "birthday": '2006-06-16', "group": 'ИС 24/11', "gender": 'ж', "phone_number": '+7 (934) 382-76-76' })
+
   res.send('Добавление студента')
 })
 
-app.put('/students', (req, res) => {
-  res.send('Изменение студента')
+app.put('/students/:id', async (req, res) => {
+  const response = await supabase
+  .from('students')
+  .update({ full_name: 'Роткова Татьяна Дмитриевна' })
+  .eq('id', req.params.id)
+
+  res.send('Студент c id=' + req.params.id + ' изменен!')
 })
 
 app.delete('/students/:id', async (req, res) => {
